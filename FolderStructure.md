@@ -106,11 +106,7 @@ Estructura visual y lógica de interfaz de usuario.
 - `Elements/`: Componentes reutilizables (botones, barras de vida, texto).
 - `Layouts/`: Prefabs o estructuras de diseño de UI (canvas, grids, anchors).
 
----
 
-## 📌 Notas Finales
 
-- Toda esta estructura está pensada para proyectos de mediana a gran escala.
-- Las carpetas pueden crecer con subniveles si una escena se vuelve compleja.
-- Se recomienda mantener un `README.md` en cada carpeta principal con detalles locales si trabajas en equipo.
+
 
