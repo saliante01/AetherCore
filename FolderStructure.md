@@ -1,6 +1,6 @@
 # 📁 ArtherCore — Estructura de Carpetas
 
-Este documento describe la estructura profesional del proyecto Unity basado en una simulación con robots. Cada carpeta cumple un rol claro para asegurar mantenibilidad, modularidad y escalabilidad.
+Este documento describe la estructura del proyecto AetherCore. Cada carpeta cumple un rol claro para asegurar mantenibilidad, modularidad y escalabilidad.
 
 ---
 
