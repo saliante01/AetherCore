@@ -107,6 +107,8 @@ Estructura visual y lógica de interfaz de usuario.
 - `Layouts/`: Prefabs o estructuras de diseño de UI (canvas, grids, anchors).
 
 
+## 🖥️ `ThirdParty`
 
+Assets importados, como: AssetStore
 
 
