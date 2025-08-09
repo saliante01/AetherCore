@@ -439,7 +439,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 704277016}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 20
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -724,6 +724,8 @@ MonoBehaviour:
   walkSpeed: 1.5
   runMultiplier: 2
   jumpForce: 3
+  coyoteTime: 0.15
+  jumpBufferTime: 0.1
   cameraController: {fileID: 582509280}
 --- !u!54 &1356081175
 Rigidbody:
@@ -837,7 +839,7 @@ Transform:
   m_GameObject: {fileID: 1356081173}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.297, y: 2.881, z: -0.569}
+  m_LocalPosition: {x: -0.297, y: 2.8419, z: -0.569}
   m_LocalScale: {x: 0.13768645, y: 0.13768645, z: 0.13768645}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1021,7 +1023,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d1b823900ae63d04db906e6831cefedf, type: 2}
+  - {fileID: 2100000, guid: c18631ac74d3d2b4488c87e429c5781f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
