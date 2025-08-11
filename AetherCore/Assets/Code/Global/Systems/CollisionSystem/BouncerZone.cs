@@ -1,4 +1,5 @@
 using UnityEngine;
+using Unity.Mathematics; // Asegúrate de tener esto si usas float3
 
 /// <summary>
 /// Esta clase representa una zona de rebote en el juego.
@@ -76,9 +77,8 @@ public class BouncerZone : MonoBehaviour
             Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                // Reinicia la velocidad vertical antes de aplicar la fuerza de rebote
-                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-                rb.AddForce(Vector3.up * bounceForce, ForceMode.VelocityChange);
+                // Establece la velocidad vertical directamente para un rebote fijo
+                rb.linearVelocity = new float3(rb.linearVelocity.x, bounceForce, rb.linearVelocity.z);
             }
         }
     }
