@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class MeleeAttack : MonoBehaviour
+public class MeleeAttack : IAttackStrategy
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void ExecuteAttack(Enemy enemy, Transform target)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log($"{enemy.name} realiza un ataque cuerpo a cuerpo contra {target.name}");
+        // Aquí iría la lógica de daño, animaciones, etc.
     }
 }

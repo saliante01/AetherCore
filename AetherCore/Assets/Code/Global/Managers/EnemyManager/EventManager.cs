@@ -1,16 +1,30 @@
-using UnityEngine;
+using System;
+using System.Collections.Generic;
 
-public class EventManager : MonoBehaviour
+public static class EventManager
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private static List<IEnemyEventListener> listeners = new List<IEnemyEventListener>();
+
+    // Registrar un listener
+    public static void RegisterListener(IEnemyEventListener listener)
     {
-        
+        if (!listeners.Contains(listener))
+            listeners.Add(listener);
     }
 
-    // Update is called once per frame
-    void Update()
+    // Eliminar un listener
+    public static void UnregisterListener(IEnemyEventListener listener)
     {
-        
+        if (listeners.Contains(listener))
+            listeners.Remove(listener);
+    }
+
+    // Disparar evento a todos los listeners
+    public static void TriggerEvent(EnemyEvent enemyEvent)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEnemyEvent(enemyEvent);
+        }
     }
 }

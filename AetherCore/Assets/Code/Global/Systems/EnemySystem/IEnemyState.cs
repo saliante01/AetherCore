@@ -1,16 +1,14 @@
 using UnityEngine;
 
-public class IEnemyState : MonoBehaviour
+public interface IEnemyState
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    
+    void EnterState(Enemy enemy);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
+    void UpdateState(Enemy enemy);
+
+    
+    void ExitState(Enemy enemy);
 }
+

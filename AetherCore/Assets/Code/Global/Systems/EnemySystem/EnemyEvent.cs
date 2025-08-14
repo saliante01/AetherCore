@@ -1,16 +1,14 @@
 using UnityEngine;
 
-public class EnemyEvent : MonoBehaviour
+public class EnemyEvent
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public string EventType { get; private set; }  // Ej: "PlayerDetected", "DamageTaken"
+    public object EventData { get; private set; }  // Datos extra que puedan ser útiles
 
-    // Update is called once per frame
-    void Update()
+    public EnemyEvent(string eventType, object eventData = null)
     {
-        
+        EventType = eventType;
+        EventData = eventData;
     }
 }
+

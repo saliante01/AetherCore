@@ -1,16 +1,8 @@
 using UnityEngine;
 
-public class IEnemyEventListener : MonoBehaviour
+public interface IEnemyEventListener
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // Método para reaccionar a eventos externos
+    void OnEnemyEvent(EnemyEvent enemyEvent);
 }
+
