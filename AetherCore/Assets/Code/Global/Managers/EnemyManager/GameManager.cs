@@ -6,41 +6,42 @@ public class GameManager : MonoBehaviour
     public Enemy enemyPrefab;
     public Transform[] patrolPoints;
     public Transform player;
-
     public GameObject projectilePrefab;
+
+    private Enemy enemyInstance;
 
     private void Start()
     {
-        // Crear un enemigo de ejemplo
-        Enemy enemy = Instantiate(enemyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        // Crear un enemigo
+        enemyInstance = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity);
 
         // Estado inicial: patrulla
         PatrolState patrolState = new PatrolState(patrolPoints);
-        enemy.ChangeState(patrolState);
+        enemyInstance.ChangeState(patrolState);
 
         // Estrategia de ataque inicial: melee
         MeleeAttack meleeAttack = new MeleeAttack();
-        enemy.SetAttackStrategy(meleeAttack);
+        enemyInstance.SetAttackStrategy(meleeAttack);
 
         // Configurar target
-        enemy.target = player;
+        enemyInstance.target = player;
 
-        // Simular cambio a ataque a distancia después de 5 segundos
+        // Programar el cambio
         Invoke(nameof(ChangeToRangeAttack), 5f);
+    }
 
-        void ChangeToRangeAttack()
-        {
-            RangeAttack rangeAttack = new RangeAttack();
-            rangeAttack.projectilePrefab = projectilePrefab;
-            rangeAttack.projectileSpeed = 12f;
-            enemy.SetAttackStrategy(rangeAttack);
+    private void ChangeToRangeAttack()
+    {
+        RangeAttack rangeAttack = new RangeAttack();
+        rangeAttack.projectilePrefab = projectilePrefab;
+        rangeAttack.projectileSpeed = 12f;
+        enemyInstance.SetAttackStrategy(rangeAttack);
 
-            // Cambiar a alerta
-            AlertState alertState = new AlertState();
-            enemy.ChangeState(alertState);
+        // Cambiar a alerta
+        AlertState alertState = new AlertState();
+        enemyInstance.ChangeState(alertState);
 
-            // Disparar evento de detección del jugador
-            EventManager.TriggerEvent(new EnemyEvent("PlayerDetected", player.position));
-        }
+        // Disparar evento de detección
+        EventManager.TriggerEvent(new EnemyEvent("PlayerDetected", player.position));
     }
 }

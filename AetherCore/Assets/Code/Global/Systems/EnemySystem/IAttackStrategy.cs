@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IAttackStrategy
 {
-    // Ejecuta el ataque
+    // Ejecutar el ataque
     void ExecuteAttack(Enemy enemy, Transform target);
 }
 

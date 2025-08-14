@@ -11,16 +11,23 @@ public class AlertState : IEnemyState
     {
         if (enemy.target == null) return;
 
-        // Seguir al jugador
+        // Mantener altura constante
+        Vector3 targetPosition = new Vector3(
+            enemy.target.position.x,
+            enemy.transform.position.y,
+            enemy.target.position.z
+        );
+
+        // Mover hacia el jugador al doble de velocidad
         enemy.transform.position = Vector3.MoveTowards(
             enemy.transform.position,
-            enemy.target.position,
-            enemy.speed * Time.deltaTime
+            targetPosition,
+            (enemy.speed * 2) * Time.deltaTime
         );
 
         // Atacar si está cerca
-        float distance = Vector3.Distance(enemy.transform.position, enemy.target.position);
-        if (distance < 1.5f) // rango de ataque
+        float distance = Vector3.Distance(enemy.transform.position, targetPosition);
+        if (distance < 1.5f)
         {
             enemy.PerformAttack(enemy.target);
         }
