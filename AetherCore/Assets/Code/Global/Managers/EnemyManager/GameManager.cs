@@ -2,46 +2,25 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Configuración de Enemigos")]
-    public Enemy enemyPrefab;
-    public Transform[] patrolPoints;
-    public Transform player;
-    public GameObject projectilePrefab;
+    [Header("Prefabs de enemigos")]
+    public EnemyA enemyAPrefab;
+    public EnemyB enemyBPrefab;
 
-    private Enemy enemyInstance;
+    [Header("Configuración de la escena")]
+    public Transform[] patrolPointsA; // Puntos de patrulla para EnemyA
+    public Transform[] patrolPointsB; // Puntos de patrulla para EnemyB
+    public Transform player;
 
     private void Start()
     {
-        // Crear un enemigo
-        enemyInstance = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity);
+        // --- Instanciar EnemyA ---
+        EnemyA enemyA = Instantiate(enemyAPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        enemyA.patrolPoints = patrolPointsA;   // Asignar puntos de patrulla
+        enemyA.Initialize(player);             // Inicializar el enemigo
 
-        // Estado inicial: patrulla
-        PatrolState patrolState = new PatrolState(patrolPoints);
-        enemyInstance.ChangeState(patrolState);
-
-        // Estrategia de ataque inicial: melee
-        MeleeAttack meleeAttack = new MeleeAttack();
-        enemyInstance.SetAttackStrategy(meleeAttack);
-
-        // Configurar target
-        enemyInstance.target = player;
-
-        // Programar el cambio
-        Invoke(nameof(ChangeToRangeAttack), 5f);
-    }
-
-    private void ChangeToRangeAttack()
-    {
-        RangeAttack rangeAttack = new RangeAttack();
-        rangeAttack.projectilePrefab = projectilePrefab;
-        rangeAttack.projectileSpeed = 12f;
-        enemyInstance.SetAttackStrategy(rangeAttack);
-
-        // Cambiar a alerta
-        AlertState alertState = new AlertState();
-        enemyInstance.ChangeState(alertState);
-
-        // Disparar evento de detección
-        EventManager.TriggerEvent(new EnemyEvent("PlayerDetected", player.position));
+        // --- Instanciar EnemyB ---
+        EnemyB enemyB = Instantiate(enemyBPrefab, new Vector3(5, 0, 0), Quaternion.identity);
+        enemyB.patrolPoints = patrolPointsB;   // Asignar puntos de patrulla
+        enemyB.Initialize(player);             // Inicializar el enemigo
     }
 }

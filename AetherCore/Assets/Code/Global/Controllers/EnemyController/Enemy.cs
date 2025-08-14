@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour, IEnemyEventListener
     public Transform target; // Usado en estados de alerta
 
     private IEnemyState currentState;
+    public IEnemyState CurrentState => currentState; // Getter público
     private IAttackStrategy currentAttack;
 
     private void OnEnable()
@@ -27,6 +28,7 @@ public class Enemy : MonoBehaviour, IEnemyEventListener
     // Cambiar estado del enemigo
     public void ChangeState(IEnemyState newState)
     {
+        currentAttack?.StopAttack(); // Detener ataque actual si hay
         currentState?.ExitState(this);
         currentState = newState;
         currentState?.EnterState(this);
