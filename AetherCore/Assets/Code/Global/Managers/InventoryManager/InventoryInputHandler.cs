@@ -4,16 +4,20 @@ public class InventoryInputHandler : MonoBehaviour
 {
     void Update()
     {
-        // Usar slot 1
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            Inventory.Instance.UseItem(0);
+        // Guardar objeto cercano con F
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            ItemPickUp itemPickUp = FindObjectOfType<ItemPickUp>();
+            if (itemPickUp != null)
+                itemPickUp.TryPickupItem();
+        }
 
-        // Usar slot 2
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            Inventory.Instance.UseItem(1);
+        // Consumir objeto activo con E
+        if (Input.GetKeyDown(KeyCode.E))
+            Inventory.Instance.UseActiveItem();
 
-        // Intercambiar slots (tecla M)
-        if (Input.GetKeyDown(KeyCode.M))
-            Inventory.Instance.SwapItems(0, 1);
+        // Intercambiar slots con Q
+        if (Input.GetKeyDown(KeyCode.Q))
+            Inventory.Instance.SwapSlots();
     }
 }

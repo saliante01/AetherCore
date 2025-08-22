@@ -3,54 +3,72 @@
 public class Inventory : MonoBehaviour
 {
     public static Inventory Instance;
-    public Item[] slots = new Item[2]; // slots 1 y 2
+    public Item[] slots = new Item[2]; // slot1 y slot2
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-
-        DebugUtility.Log("Inventory iniciado con " + slots.Length + " slots");
     }
 
+    void Start()
+    {
+        RefreshUI();
+    }
+
+    // Guardar un objeto en el inventario
     public bool AddItem(Item item)
     {
+        // Buscar primer slot vacío
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i] == null)
             {
                 slots[i] = item;
-                item.gameObject.SetActive(false); // objeto desaparece del mundo
+                item.gameObject.SetActive(false);
                 DebugUtility.Log(item.GetName() + " agregado al slot " + (i + 1));
+                RefreshUI();
                 return true;
             }
         }
-        DebugUtility.Log("No hay slots libres para " + item.GetName());
-        return false;
+
+        // Si ambos slots ocupados, reemplaza el slot1 (activo)
+        DebugUtility.Log(slots[0].GetName() + " reemplazado por " + item.GetName() + " en slot1");
+        slots[0] = item;
+        item.gameObject.SetActive(false);
+        RefreshUI();
+        return true;
     }
 
-    public void UseItem(int slotIndex)
+    // Consumir el item del slot activo (slot1)
+    public void UseActiveItem()
     {
-        if (slotIndex >= 0 && slotIndex < slots.Length && slots[slotIndex] != null)
+        if (slots[0] != null)
         {
-            slots[slotIndex].Use();               // uso del item
-            DebugUtility.Log(slots[slotIndex].GetName() + " eliminado del slot " + (slotIndex + 1));
-            slots[slotIndex] = null;              // eliminar del slot
+            slots[0].Use();
+            DebugUtility.Log(slots[0].GetName() + " usado y eliminado del slot1");
+            slots[0] = null;
+            RefreshUI();
         }
         else
         {
-            DebugUtility.Log("Slot " + (slotIndex + 1) + " vacío");
+            DebugUtility.Log("Slot1 vacío, no hay objeto para usar");
         }
     }
 
-    public void SwapItems(int slotA, int slotB)
+    // Intercambiar los objetos de los dos slots
+    public void SwapSlots()
     {
-        if (slotA < 0 || slotA >= slots.Length || slotB < 0 || slotB >= slots.Length) return;
+        Item temp = slots[0];
+        slots[0] = slots[1];
+        slots[1] = temp;
+        DebugUtility.Log("Slots intercambiados");
+        RefreshUI();
+    }
 
-        Item temp = slots[slotA];
-        slots[slotA] = slots[slotB];
-        slots[slotB] = temp;
-
-        DebugUtility.Log("Items intercambiados: slot " + (slotA + 1) + " ↔ slot " + (slotB + 1));
+    private void RefreshUI()
+    {
+        if (InventoryUI.Instance != null)
+            InventoryUI.Instance.RefreshUI(slots, 0); // siempre resalta slot1
     }
 }

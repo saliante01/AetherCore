@@ -4,13 +4,18 @@ public class ItemPickUp : MonoBehaviour
 {
     private Item nearbyItem;
 
-    void Update()
+    // Llamar desde InventoryInputHandler con F
+    public void TryPickupItem()
     {
-        // Tomar objeto cercano (simulación tecla T)
-        if (Input.GetKeyDown(KeyCode.T) && nearbyItem != null)
+        if (nearbyItem != null)
         {
             Inventory.Instance.AddItem(nearbyItem);
+            DebugUtility.Log("Objeto " + nearbyItem.GetName() + " recogido con F");
             nearbyItem = null;
+        }
+        else
+        {
+            DebugUtility.Log("No hay objetos cercanos para recoger");
         }
     }
 
@@ -20,7 +25,7 @@ public class ItemPickUp : MonoBehaviour
         if (item != null)
         {
             nearbyItem = item;
-            DebugUtility.Log("Objeto encontrado: " + item.GetName());
+            DebugUtility.Log("Objeto cercano: " + item.GetName());
         }
     }
 
@@ -30,7 +35,7 @@ public class ItemPickUp : MonoBehaviour
         if (item != null && nearbyItem == item)
         {
             nearbyItem = null;
-            DebugUtility.Log("Objeto dejado: " + item.GetName());
+            DebugUtility.Log("Objeto salido de rango: " + item.GetName());
         }
     }
 }
