@@ -1,16 +1,21 @@
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+[System.Serializable]
+public class Item
 {
-    public string itemName = "Item";
+    public string itemName;
+    public Sprite icon;
+    private IItemStrategy itemStrategy;
 
-    public virtual void Use()
+    public Item(string name, Sprite icon, IItemStrategy strategy)
     {
-        DebugUtility.Log(itemName + " usado");
+        itemName = name;
+        this.icon = icon;
+        itemStrategy = strategy;
     }
-
-    public string GetName()
+    public void Use(GameObject target)
     {
-        return itemName;
+        itemStrategy?.Use(target);
+        DebugUtility.Log($"Used item: {itemName}");
     }
 }

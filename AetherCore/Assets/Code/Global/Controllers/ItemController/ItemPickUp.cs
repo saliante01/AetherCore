@@ -1,41 +1,34 @@
 using UnityEngine;
 
-public class ItemPickUp : MonoBehaviour
+public class ItemPickup : MonoBehaviour
 {
-    private Item nearbyItem;
+    public MonoBehaviour itemStrategyComponent; // arrastras HealItem u otra estrategia
+    private IItemStrategy itemStrategy;
 
-    // Llamar desde InventoryInputHandler con F
-    public void TryPickupItem()
+    public string itemName;
+    public Sprite icon;
+
+    void Awake()
     {
-        if (nearbyItem != null)
+        itemStrategy = itemStrategyComponent as IItemStrategy;
+        if (itemStrategy == null)
         {
-            Inventory.Instance.AddItem(nearbyItem);
-            DebugUtility.Log("Objeto " + nearbyItem.GetName() + " recogido con F");
-            nearbyItem = null;
+            Debug.LogError("El componente asignado no implementa IItemStrategy");
         }
-        else
-        {
-            DebugUtility.Log("No hay objetos cercanos para recoger");
-        }
+    }
+
+    public Item GetItem()
+    {
+        return new Item(itemName, icon, itemStrategy);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Item item = other.GetComponent<Item>();
-        if (item != null)
+        Inventory inventory = other.GetComponent<Inventory>();
+        if (inventory != null)
         {
-            nearbyItem = item;
-            DebugUtility.Log("Objeto cercano: " + item.GetName());
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        Item item = other.GetComponent<Item>();
-        if (item != null && nearbyItem == item)
-        {
-            nearbyItem = null;
-            DebugUtility.Log("Objeto salido de rango: " + item.GetName());
+            inventory.ReplaceActiveItem(GetItem());
+            Destroy(gameObject);
         }
     }
 }

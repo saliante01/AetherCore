@@ -1,14 +1,17 @@
 using UnityEngine;
 
-public class HealItem : Item
+public class HealItem : MonoBehaviour, IItemStrategy
 {
-    void Awake()
-    {
-        itemName = "HealItem";
-    }
+    public int healAmount = 10; // editable en Inspector
 
-    public override void Use()
+    // Este método implementa la estrategia
+    public void Use(GameObject target)
     {
-        DebugUtility.Log(itemName + " usado: Salud +10 (simulado)");
+        PlayerStats stats = target.GetComponent<PlayerStats>();
+        if (stats != null)
+        {
+            stats.Heal();
+            Debug.Log("Curando " + healAmount);
+        }
     }
 }

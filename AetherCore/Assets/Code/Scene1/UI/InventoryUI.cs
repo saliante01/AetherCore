@@ -3,47 +3,49 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    public static InventoryUI Instance { get; private set; }
+    [SerializeField] private Image[] slotIcons;
+    [SerializeField] private Color activeColor = Color.yellow;
+    [SerializeField] private Color inactiveColor = Color.white;
 
-    [Header("Slots (fondos)")]
-    public Image slot1;
-    public Image slot2;
-
-    [Header("Iconos dentro de los slots")]
-    public GameObject slot1Icon;
-    public GameObject slot2Icon;
-
-    [Header("Colores")]
-    public Color baseColor = new Color(0.8f, 0.8f, 0.8f); // gris claro
-    public Color selectedColor = Color.yellow;            // slot seleccionado (slot1 siempre)
-
-    private void Awake()
+    void Start()
     {
-        if (Instance != null && Instance != this)
+        var inventory = FindObjectOfType<Inventory>();
+        if (inventory != null)
         {
-            Destroy(gameObject);
-            return;
+            Bind(inventory);
         }
-        Instance = this;
     }
 
-    private void Start()
+    public void Bind(Inventory inventory)
     {
-        slot1Icon.SetActive(false);
-        slot2Icon.SetActive(false);
-
-        slot1.color = selectedColor;
-        slot2.color = baseColor;
+        inventory.OnInventoryChanged += UpdateUI;
+        UpdateUI(inventory.slots, 0);
     }
 
-    public void RefreshUI(Item[] slots, int selectedSlotAlwaysZero)
+    private void OnDestroy()
     {
-        // Iconos visibles solo si hay item
-        slot1Icon.SetActive(slots[0] != null);
-        slot2Icon.SetActive(slots[1] != null);
+        var inventory = FindObjectOfType<Inventory>();
+        if (inventory != null)
+        {
+            inventory.OnInventoryChanged -= UpdateUI;
+        }
+    }
 
-        // Colores
-        slot1.color = selectedColor; // siempre iluminado
-        slot2.color = baseColor;     // slot2 nunca iluminado
+    private void UpdateUI(Slots[] slots, int activeSlot)
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (!slots[i].isEmpty && slots[i].storedItem.icon != null)
+            {
+                slotIcons[i].sprite = slots[i].storedItem.icon;
+                slotIcons[i].enabled = true;
+            }
+            else
+            {
+                slotIcons[i].enabled = false;
+            }
+
+            slotIcons[i].color = (i == activeSlot) ? activeColor : inactiveColor;
+        }
     }
 }
