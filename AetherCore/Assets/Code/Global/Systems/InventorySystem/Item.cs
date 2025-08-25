@@ -6,16 +6,18 @@ public class Item
     public string itemName;
     public Sprite icon;
     private IItemStrategy itemStrategy;
-
-    public Item(string name, Sprite icon, IItemStrategy strategy)
+    public GameObject worldPrefab;
+    public Item(string name, Sprite icon, IItemStrategy strategy,GameObject prefab)
     {
         itemName = name;
         this.icon = icon;
         itemStrategy = strategy;
+        worldPrefab = prefab;
     }
+
     public void Use(GameObject target)
     {
         itemStrategy?.Use(target);
-        DebugUtility.Log($"Used item: {itemName}");
+        Debug.Log($"Used item: {itemName}");
     }
 }

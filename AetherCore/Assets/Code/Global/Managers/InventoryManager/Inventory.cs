@@ -3,30 +3,41 @@ using System;
 
 public class Inventory : MonoBehaviour
 {
-    public Slots[] slots = new Slots[2];
-    private int activeSlot = 0;
+    public Slot[] slots = new Slot[2];
+    public int activeSlot = 0;
 
-    // Evento que avisa a la UI
-    public event Action<Slots[], int> OnInventoryChanged;
+    public event Action<Slot[], int> OnInventoryChanged;
+
+    private void Awake()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i] == null) slots[i] = new Slot();
+        }
+    }
+    public Slot GetActiveSlot()
+    {
+     return slots[activeSlot];
+    }
 
     public void UseActiveItem(GameObject target)
     {
-        if (!slots[activeSlot].isEmpty)
+        if (!slots[activeSlot].IsEmpty)
         {
             slots[activeSlot].storedItem.Use(target);
-            slots[activeSlot].clear();
+            slots[activeSlot].Clear();
             TriggerInventoryChanged();
         }
     }
 
     public void ReplaceActiveItem(Item newItem)
     {
-        if (!slots[activeSlot].isEmpty)
+        if (!slots[activeSlot].IsEmpty)
         {
             Debug.Log($"Se botó el item: {slots[activeSlot].storedItem.itemName}");
         }
 
-        slots[activeSlot].setItem(newItem);
+        slots[activeSlot].SetItem(newItem);
         TriggerInventoryChanged();
     }
 

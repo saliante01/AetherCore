@@ -3,49 +3,37 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    [SerializeField] private Image[] slotIcons;
-    [SerializeField] private Color activeColor = Color.yellow;
-    [SerializeField] private Color inactiveColor = Color.white;
+    public Image[] slotImages;
+    public Color emptyColor = Color.black;
+    public Color activeColor = Color.yellow;
+    public Color inactiveColor = Color.white;
 
-    void Start()
+    private Inventory inventory;
+
+    private void Start()
     {
-        var inventory = FindObjectOfType<Inventory>();
+        inventory = FindFirstObjectByType<Inventory>();
         if (inventory != null)
         {
-            Bind(inventory);
+            inventory.OnInventoryChanged += UpdateUI;
+            UpdateUI(inventory.slots, 0);
         }
     }
 
-    public void Bind(Inventory inventory)
+    private void UpdateUI(Slot[] slots, int activeSlot)
     {
-        inventory.OnInventoryChanged += UpdateUI;
-        UpdateUI(inventory.slots, 0);
-    }
-
-    private void OnDestroy()
-    {
-        var inventory = FindObjectOfType<Inventory>();
-        if (inventory != null)
+        for (int i = 0; i < slotImages.Length; i++)
         {
-            inventory.OnInventoryChanged -= UpdateUI;
-        }
-    }
-
-    private void UpdateUI(Slots[] slots, int activeSlot)
-    {
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (!slots[i].isEmpty && slots[i].storedItem.icon != null)
+            if (i < slots.Length && !slots[i].IsEmpty)
             {
-                slotIcons[i].sprite = slots[i].storedItem.icon;
-                slotIcons[i].enabled = true;
+                slotImages[i].sprite = slots[i].storedItem.icon;
+                slotImages[i].color = i == activeSlot ? activeColor : inactiveColor;
             }
             else
             {
-                slotIcons[i].enabled = false;
+                slotImages[i].sprite = null;
+                slotImages[i].color = emptyColor;
             }
-
-            slotIcons[i].color = (i == activeSlot) ? activeColor : inactiveColor;
         }
     }
 }

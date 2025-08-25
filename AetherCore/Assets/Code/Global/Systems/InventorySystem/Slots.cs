@@ -1,19 +1,22 @@
 using UnityEngine;
 
-public class Slots
+[System.Serializable]
+public class Slot
 {
     public Item storedItem;
-    public bool isEmpty => storedItem == null;
-    public void setItem(Item item)
+    public bool IsEmpty => storedItem == null;
+
+    public void SetItem(Item item)
     {
         storedItem = item;
-        DebugUtility.Log("Item " + item.itemName + " added to slot.");
+        Debug.Log("Item " + item.itemName + " added to slot.");
     }
-    public void clear()
+
+    public void Clear()
     {
         if (storedItem != null)
         {
-            DebugUtility.Log("Item " + storedItem.itemName + " removed from slot.");
+            Debug.Log("Item " + storedItem.itemName + " removed from slot.");
             storedItem = null;
         }
     }

@@ -2,33 +2,34 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    public MonoBehaviour itemStrategyComponent; // arrastras HealItem u otra estrategia
+    public MonoBehaviour itemStrategyComponent;
     private IItemStrategy itemStrategy;
-
+    public GameObject worldPrefab;
     public string itemName;
     public Sprite icon;
 
-    void Awake()
+    private void Awake()
     {
         itemStrategy = itemStrategyComponent as IItemStrategy;
         if (itemStrategy == null)
-        {
             Debug.LogError("El componente asignado no implementa IItemStrategy");
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Inventory inventory = other.GetComponent<Inventory>();
+            if (inventory != null)
+            {
+                inventory.ReplaceActiveItem(GetItem());
+                Destroy(gameObject);
+            }
         }
     }
 
     public Item GetItem()
     {
-        return new Item(itemName, icon, itemStrategy);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Inventory inventory = other.GetComponent<Inventory>();
-        if (inventory != null)
-        {
-            inventory.ReplaceActiveItem(GetItem());
-            Destroy(gameObject);
-        }
+        return new Item(itemName, icon, itemStrategy, worldPrefab);
     }
 }
