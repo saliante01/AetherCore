@@ -10,18 +10,18 @@ public class Inventory : MonoBehaviour
 
     private InventoryUI inventoryUI;
 
-    private void Awake()
+   private void Awake()
     {
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i] == null)
                 slots[i] = new Slot();
 
-            slots[i].storedItem = null; // asegurar vacío
+            slots[i].storedItem = null; 
+            Debug.Log($"Slot {i} initialized.");
         }
-
-        inventoryUI = FindFirstObjectByType<InventoryUI>();
     }
+
 
     public Slot GetActiveSlot()
     {
@@ -30,7 +30,7 @@ public class Inventory : MonoBehaviour
 
     public void UseActiveItem(GameObject target)
     {
-        // 🚫 solo slot[0] puede usarse
+        
         if (activeSlot != 0)
         {
             Debug.Log("Solo el slot 1 puede usar items. Haz swap primero.");
@@ -46,7 +46,7 @@ public class Inventory : MonoBehaviour
 
         slot.storedItem.Use(target);
 
-        // 🔄 feedback visual en UI
+        
         if (inventoryUI != null)
         {
             inventoryUI.FlashUsedSlot(0, 0.5f);
