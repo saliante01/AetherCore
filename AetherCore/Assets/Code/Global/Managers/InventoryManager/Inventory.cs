@@ -3,63 +3,84 @@ using System;
 
 public class Inventory : MonoBehaviour
 {
-    public bool HasAnyItem()
-    {
-        foreach (var slot in slots)
-        {
-            if (!slot.IsEmpty)
-                return true;
-        }
-        return false;
-    }
     public Slot[] slots = new Slot[2];
     public int activeSlot = 0;
 
     public event Action<Slot[], int> OnInventoryChanged;
 
+    private InventoryUI inventoryUI;
+
     private void Awake()
     {
         for (int i = 0; i < slots.Length; i++)
         {
-            if (slots[i] == null) slots[i] = new Slot();
+            if (slots[i] == null)
+                slots[i] = new Slot();
+
+            slots[i].storedItem = null; // asegurar vacío
         }
+
+        inventoryUI = FindFirstObjectByType<InventoryUI>();
     }
+
     public Slot GetActiveSlot()
     {
-     return slots[activeSlot];
+        return slots[activeSlot];
     }
 
     public void UseActiveItem(GameObject target)
     {
-        Slot slot = slots[activeSlot];
-        Debug.Log(slot.IsEmpty);
-        Debug.Log(slot.storedItem == null);
+        // 🚫 solo slot[0] puede usarse
+        if (activeSlot != 0)
+        {
+            Debug.Log("Solo el slot 1 puede usar items. Haz swap primero.");
+            return;
+        }
+
+        Slot slot = slots[0];
         if (slot == null || slot.IsEmpty || slot.storedItem == null)
         {
             Debug.Log("No hay item equipado en el slot activo.");
             return;
         }
+
         slot.storedItem.Use(target);
+
+        // 🔄 feedback visual en UI
+        if (inventoryUI != null)
+        {
+            inventoryUI.FlashUsedSlot(0, 0.5f);
+        }
+
         TriggerInventoryChanged();
     }
 
-
-
-
     public void ReplaceActiveItem(Item newItem)
     {
-        if (!slots[activeSlot].IsEmpty)
+        // buscar primer slot vacío
+        for (int i = 0; i < slots.Length; i++)
         {
-            Debug.Log($"Se botó el item: {slots[activeSlot].storedItem.itemName}");
+            if (slots[i].IsEmpty)
+            {
+                slots[i].SetItem(newItem);
+                TriggerInventoryChanged();
+                return;
+            }
         }
 
+        // si no hay espacio, reemplazar el activo
+        Debug.Log($"Se reemplazó el item: {slots[activeSlot].storedItem.itemName}");
         slots[activeSlot].SetItem(newItem);
         TriggerInventoryChanged();
     }
 
     public void SwapActiveSlot()
     {
-        activeSlot = (activeSlot + 1) % slots.Length;
+        // intercambiar items entre slot[0] y slot[1]
+        Item temp = slots[0].storedItem;
+        slots[0].storedItem = slots[1].storedItem;
+        slots[1].storedItem = temp;
+
         TriggerInventoryChanged();
     }
 

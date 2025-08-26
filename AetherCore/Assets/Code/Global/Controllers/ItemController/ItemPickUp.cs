@@ -12,7 +12,7 @@ public class ItemPickup : MonoBehaviour
     {
         itemStrategy = itemStrategyComponent as IItemStrategy;
         if (itemStrategy == null)
-            Debug.LogError("El componente asignado no implementa IItemStrategy");
+            Debug.LogWarning($"El componente asignado no implementa IItemStrategy para el item '{itemName}'");
     }
 
     private void OnTriggerStay(Collider other)
@@ -22,7 +22,8 @@ public class ItemPickup : MonoBehaviour
             Inventory inventory = other.GetComponent<Inventory>();
             if (inventory != null)
             {
-                inventory.ReplaceActiveItem(GetItem());
+                Item newItem = GetItem();
+                inventory.ReplaceActiveItem(newItem); 
                 Destroy(gameObject);
             }
         }
