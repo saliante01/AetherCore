@@ -19,5 +19,9 @@ public class Slot
             Debug.Log("Item " + storedItem.itemName + " removido del slot.");
             storedItem = null;
         }
+        else
+        { 
+            Debug.Log("El slot ya está vacío.");
+        }
     }
 }

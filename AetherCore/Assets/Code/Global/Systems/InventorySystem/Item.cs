@@ -17,7 +17,15 @@ public class Item
 
     public void Use(GameObject target)
     {
-        itemStrategy?.Use(target);
-        Debug.Log($"Item Usado: {itemName}");
+    if (itemStrategy == null)
+    {
+        Debug.LogWarning($"El item '{itemName}' no tiene estrategia de uso.");
+        return;
     }
+
+    itemStrategy.Use(target);
+    Debug.Log($"Item Usado: {itemName}");
+    }
+
+
 }

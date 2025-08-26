@@ -31,13 +31,20 @@ public class Inventory : MonoBehaviour
 
     public void UseActiveItem(GameObject target)
     {
-        if (!slots[activeSlot].IsEmpty)
+        Slot slot = slots[activeSlot];
+        Debug.Log(slot.IsEmpty);
+        Debug.Log(slot.storedItem == null);
+        if (slot == null || slot.IsEmpty || slot.storedItem == null)
         {
-            slots[activeSlot].storedItem.Use(target);
-            slots[activeSlot].Clear();
-            TriggerInventoryChanged();
+            Debug.Log("No hay item equipado en el slot activo.");
+            return;
         }
+        slot.storedItem.Use(target);
+        TriggerInventoryChanged();
     }
+
+
+
 
     public void ReplaceActiveItem(Item newItem)
     {
