@@ -18,6 +18,6 @@ public class Item
     public void Use(GameObject target)
     {
         itemStrategy?.Use(target);
-        Debug.Log($"Used item: {itemName}");
+        Debug.Log($"Item Usado: {itemName}");
     }
 }

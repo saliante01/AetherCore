@@ -30,6 +30,7 @@ public class InventoryInputHandler : MonoBehaviour
             DropActiveItem();
     }
 
+
     private void DropActiveItem()
     {
         Slot slot = inventory.GetActiveSlot();

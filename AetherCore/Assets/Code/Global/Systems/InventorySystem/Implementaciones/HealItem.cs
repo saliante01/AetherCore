@@ -8,7 +8,7 @@ public class HealItem : MonoBehaviour, IItemStrategy
         if (stats != null)
         {
             stats.Heal(); // ahora coincide con tu PlayerStats actual
-            Debug.Log("Player healed!");
+            Debug.Log("Se curo al player con el item de curación.");
         }
     }
 }

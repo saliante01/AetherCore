@@ -3,6 +3,15 @@ using System;
 
 public class Inventory : MonoBehaviour
 {
+    public bool HasAnyItem()
+    {
+        foreach (var slot in slots)
+        {
+            if (!slot.IsEmpty)
+                return true;
+        }
+        return false;
+    }
     public Slot[] slots = new Slot[2];
     public int activeSlot = 0;
 
