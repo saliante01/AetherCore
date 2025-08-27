@@ -8,6 +8,9 @@ public class ItemPickup : MonoBehaviour
     public string itemName;
     public Sprite icon;
 
+    private Inventory playerInventory; 
+    private bool playerInside = false;
+
     private void Awake()
     {
         itemStrategy = itemStrategyComponent as IItemStrategy;
@@ -15,22 +18,39 @@ public class ItemPickup : MonoBehaviour
             Debug.LogWarning($"El componente asignado no implementa IItemStrategy para el item '{itemName}'");
     }
 
-    private void OnTriggerStay(Collider other)
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Inventory inventory = other.GetComponent<Inventory>();
-            if (inventory != null)
-            {
-                Item newItem = GetItem();
-                inventory.ReplaceActiveItem(newItem); 
-                Destroy(gameObject);
-            }
+        
+        if (playerInside && Input.GetKeyDown(KeyCode.F) && playerInventory != null)
+        {   
+            Debug.Log($"Recogiendo item: {itemName}");
+            TakeItem();
         }
     }
 
-    public Item GetItem()
+    private void TakeItem()
     {
-        return new Item(itemName, icon, itemStrategy, worldPrefab);
+        Item newItem = new Item(itemName, icon, itemStrategy, worldPrefab);
+        playerInventory.ReplaceActiveItem(newItem);
+        Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Solo reaccionar si el objeto tiene tag "Player"
+        if (other.CompareTag("Player"))
+        {
+            playerInventory = other.GetComponent<Inventory>();
+            playerInside = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInside = false;
+            playerInventory = null;
+        }
     }
 }

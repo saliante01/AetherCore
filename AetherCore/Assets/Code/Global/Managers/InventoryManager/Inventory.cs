@@ -10,17 +10,21 @@ public class Inventory : MonoBehaviour
 
     private InventoryUI inventoryUI;
 
-   private void Awake()
+  private void Awake()
+{
+    for (int i = 0; i < slots.Length; i++)
     {
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i] == null)
-                slots[i] = new Slot();
+        if (slots[i] == null)
+            slots[i] = new Slot();
 
-            slots[i].storedItem = null; 
-            Debug.Log($"Slot {i} initialized.");
-        }
+        slots[i].storedItem = null;
     }
+
+    // Disparar evento al inicio para que la UI se actualice
+    OnInventoryChanged?.Invoke(slots, activeSlot);
+}
+
+
 
 
     public Slot GetActiveSlot()
@@ -82,6 +86,7 @@ public class Inventory : MonoBehaviour
         slots[1].storedItem = temp;
 
         TriggerInventoryChanged();
+        Debug.Log("Slots intercambiados.");
     }
 
     private void TriggerInventoryChanged()

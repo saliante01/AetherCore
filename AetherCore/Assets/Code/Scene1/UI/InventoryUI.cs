@@ -14,14 +14,16 @@ public class InventoryUI : MonoBehaviour
     private Inventory inventory;
 
     private void Start()
-{
-    inventory = FindFirstObjectByType<Inventory>();
-    if (inventory != null)
     {
-        inventory.OnInventoryChanged += UpdateUI;
-        UpdateUI(inventory.slots, inventory.activeSlot);
+        inventory = FindFirstObjectByType<Inventory>();
+        if (inventory != null)
+        {
+            inventory.OnInventoryChanged += UpdateUI;
+         // no hace falta llamar a TriggerInventoryChanged
+        }
     }
-}
+
+
 
 
     private void UpdateUI(Slot[] slots, int activeSlot)
@@ -31,16 +33,18 @@ public class InventoryUI : MonoBehaviour
         if (i < slots.Length && !slots[i].IsEmpty)
         {
             slotImages[i].sprite = slots[i].storedItem.icon;
+            // 🔹 solo pintar activo/inactivo si hay item
             slotImages[i].color = i == activeSlot ? activeColor : inactiveColor;
         }
         else
         {
-            // slot vacío → mostrar sprite de marco o fondo
-            slotImages[i].sprite = defaultSlotSprite;
-            slotImages[i].color = Color.white; // o transparente si quieres
+            slotImages[i].sprite = defaultSlotSprite; 
+            slotImages[i].color = Color.white; // slot vacío no se pinta
         }
     }
 }
+
+
 
 
   
