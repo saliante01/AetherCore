@@ -4,6 +4,10 @@ public class HackMenuController : MonoBehaviour
 {
     public Inventory playerInventory;
 
+    [Header("Referencias a estrategias existentes")]
+    public HealItem healItemPrefab;
+    public SpeedItem speedItemPrefab;
+
     public void AddHackItem(HackItemData data)
     {
         if (playerInventory == null || data == null)
@@ -15,14 +19,14 @@ public class HackMenuController : MonoBehaviour
         // Crear estrategia según el tipo
         IItemStrategy strategy = null;
         switch (data.type)
-        {
-            case ItemType.Heal:
-                strategy = new HealItem(); // usa la estrategia existente
-                break;
-            case ItemType.Speed:
-                strategy = new SpeedItem();
-                break;
-        }
+{
+         case ItemType.Heal:
+            strategy = (IItemStrategy)healItemPrefab;
+            break;
+        case ItemType.Speed:
+            strategy = (IItemStrategy)speedItemPrefab;
+        break;
+}
 
         // Crear el item real
         Item newItem = new Item(data.itemName, data.icon, strategy, data.worldPrefab);

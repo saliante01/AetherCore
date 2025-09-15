@@ -24,7 +24,20 @@ public class Item
             return;
         }
 
-        itemStrategy.Use(target);
-        Debug.Log($"Item Usado: {itemName}");
+        if (itemStrategy.Use(target))
+        {
+            Debug.Log($"Item Usado: {itemName}");
+        }
+    }
+
+    public IItemStrategy GetItemStrategy()
+    {
+        return itemStrategy;
+    }
+
+    // ✅ Este es el método clave
+    public float GetCooldownRemaining()
+    {
+        return itemStrategy != null ? itemStrategy.GetCooldownRemaining() : 0f;
     }
 }

@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class InventoryUI : MonoBehaviour
 {
+    [Header("Referencias de UI")]
     public Image[] slotImages;
-    //public Color emptyColor = Color.white;
-    public Color activeColor = Color.yellow;
-    public Color inactiveColor = Color.red;
-    public Color usedColor = Color.gray;
-    public Sprite defaultSlotSprite; 
+    public Sprite defaultSlotSprite;
+
+    [Header("Colores")]
+    public Color slot1Color = Color.white;   // Slot 1 siempre blanco
+    public Color slot2Color = Color.red;     // Slot 2 siempre rojo
+    public Color usedColor = Color.black;    // Color cuando el item está en cooldown
+    public Color emptyColor = Color.gray;    // Slot vacío
 
     private Inventory inventory;
 
@@ -19,56 +21,50 @@ public class InventoryUI : MonoBehaviour
         if (inventory != null)
         {
             inventory.OnInventoryChanged += UpdateUI;
-         // no hace falta llamar a TriggerInventoryChanged
-        }
-    }
-
-
-
-
-    private void UpdateUI(Slot[] slots, int activeSlot)
-{
-    for (int i = 0; i < slotImages.Length; i++)
-    {
-        if (i < slots.Length && !slots[i].IsEmpty)
-        {
-            slotImages[i].sprite = slots[i].storedItem.icon;
-            // 🔹 solo pintar activo/inactivo si hay item
-            slotImages[i].color = i == activeSlot ? activeColor : inactiveColor;
+            UpdateUI(inventory.slots, inventory.activeSlot);
         }
         else
         {
-            slotImages[i].sprite = defaultSlotSprite; 
-            slotImages[i].color = Color.white; // slot vacío no se pinta
+            Debug.LogError("No se encontró el Inventory en la escena.");
+        }
+    }
+
+    private void Update()
+{
+    if (inventory == null) return;
+
+    for (int i = 0; i < inventory.slots.Length; i++)
+    {
+        Slot slot = inventory.slots[i];
+
+        if (!slot.IsEmpty && slot.storedItem != null)
+        {
+            bool onCooldown = slot.storedItem.GetCooldownRemaining() > 0f;
+
+            // Slot 1 blanco, Slot 2 rojo, negro si en cooldown
+            slotImages[i].color = onCooldown ? usedColor : (i == 0 ? slot1Color : slot2Color);
+        }
+        else
+        {
+            slotImages[i].color = emptyColor;
         }
     }
 }
 
-
-
-
-  
-    public void FlashUsedSlot(int slotIndex, float duration = 0.5f)
+    public void UpdateUI(Slot[] slots, int activeSlot)
     {
-        StartCoroutine(FlashSlotCoroutine(slotIndex, duration));
-    }
-
-    private IEnumerator FlashSlotCoroutine(int slotIndex, float duration)
-    {
-        if (slotIndex < 0 || slotIndex >= slotImages.Length)
-            yield break;
-
-        slotImages[slotIndex].color = usedColor;
-        yield return new WaitForSeconds(duration);
-
-        // volver a color normal según si es activo o no
-        if (!inventory.slots[slotIndex].IsEmpty)
+        for (int i = 0; i < slotImages.Length; i++)
         {
-            slotImages[slotIndex].color = (slotIndex == inventory.activeSlot) ? activeColor : inactiveColor;
-        }
-        else
-        {
-          //  slotImages[slotIndex].color = emptyColor;
+            if (i < slots.Length && !slots[i].IsEmpty && slots[i].storedItem != null)
+            {
+                slotImages[i].sprite = slots[i].storedItem.icon;
+                slotImages[i].color = i == 0 ? slot1Color : slot2Color;
+            }
+            else
+            {
+                slotImages[i].sprite = defaultSlotSprite;
+                slotImages[i].color = emptyColor;
+            }
         }
     }
 }

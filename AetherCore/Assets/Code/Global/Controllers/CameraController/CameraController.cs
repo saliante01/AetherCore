@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
     /// </summary>
     private void InicializarCamara()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+       // Cursor.lockState = CursorLockMode.Locked; Ahora lo maneja el HackMenuToggle
 
         if (player == null || cameraTarget == null)
         {
