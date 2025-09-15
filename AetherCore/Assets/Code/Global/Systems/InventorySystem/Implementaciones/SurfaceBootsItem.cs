@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpeedItem : MonoBehaviour, IItemStrategy
+public class SurfaceBootsItem : MonoBehaviour, IItemStrategy
 {
     public float cooldown = 5f;
     private float lastUseTime = -Mathf.Infinity;
